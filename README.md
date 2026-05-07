@@ -1,5 +1,7 @@
 🤖 AI Chat Bot with Google Gemini
 A Streamlit-based chat application that lets you chat with your documents using Google's Gemini AI model.
+
+🌐 Live Demo: https://founderchat-draiaxldwasa2aks5ofyjf.streamlit.app/
 🚀 Quick Start
 1. Get Your API Key
 
