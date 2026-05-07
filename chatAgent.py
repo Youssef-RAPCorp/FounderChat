@@ -61,7 +61,7 @@ st.subheader("Chat with your AI Assistant, Interview Bot!")
 @st.cache_resource
 def load_vector_store():
     try:
-        embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_api_key=GOOGLE_API_KEY)
+        embeddings = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001", google_api_key=GOOGLE_API_KEY)
         vectorstore = FAISS.load_local("vectorstore_faiss", embeddings, allow_dangerous_deserialization=True)
         return vectorstore, "✅ Vector store loaded successfully!"
     except FileNotFoundError:

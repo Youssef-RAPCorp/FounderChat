@@ -23,7 +23,7 @@ st.title("📚 Document Vector Store Creator")
 def get_embeddings():
     try:
         return GoogleGenerativeAIEmbeddings(
-            model="models/embedding-001", 
+            model="models/gemini-embedding-001",
             google_api_key=GOOGLE_API_KEY
         )
     except Exception as e:
