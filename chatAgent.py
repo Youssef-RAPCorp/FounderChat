@@ -7,9 +7,21 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_community.vectorstores import FAISS
 import langchain.docstore.document as docstore_document
 
-# This patch is a temporary workaround for the loading error.
-# It should be removed once the vector store is recreated.
-docstore_document.Document.__slots__ = list(docstore_document.Document.__slots__) + ['__fields_set__']
+# Compatibility shim: pickle state key changed between Pydantic versions
+def _compat_doc_setstate(self, state):
+    d = state.get('__dict__', {})
+    fs = state.get('__fields_set__') or state.get('fields_set') or set()
+    try:
+        object.__setattr__(self, '__dict__', d)
+    except Exception:
+        self.__dict__.update(d)
+    for attr in ('__fields_set__', '__pydantic_fields_set__'):
+        try:
+            object.__setattr__(self, attr, fs)
+        except Exception:
+            pass
+
+docstore_document.Document.__setstate__ = _compat_doc_setstate
 
 # Handle API key
 try:
@@ -48,10 +60,6 @@ st.subheader("Chat with your AI Assistant, Interview Bot!")
 
 @st.cache_resource
 def load_vector_store():
-    # This patch is a temporary workaround for the loading error.
-    # It should be removed once the vector store is recreated.
-    docstore_document.Document.__slots__ = list(docstore_document.Document.__slots__) + ['__fields_set__']
-    
     try:
         embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_api_key=GOOGLE_API_KEY)
         vectorstore = FAISS.load_local("vectorstore_faiss", embeddings, allow_dangerous_deserialization=True)
