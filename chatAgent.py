@@ -82,7 +82,9 @@ def search_vectorstore(query, vectorstore, k=3):
         docs = vectorstore.similarity_search(query, k=k)
         return docs
     except Exception as e:
-        st.warning(f"⚠️ Search failed: {e}")
+        import traceback
+        st.warning(f"⚠️ Search failed: {type(e).__name__}: {e}")
+        st.code(traceback.format_exc())
         return []
 
 # Chat function using direct Gemini SDK
