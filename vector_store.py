@@ -7,7 +7,10 @@ import streamlit as st
 import pickle
 import os
 
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "")
+try:
+    GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
+except Exception:
+    GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "")
 
 if not GOOGLE_API_KEY:
     st.error("❌ Please set your GOOGLE_API_KEY in Streamlit secrets")
